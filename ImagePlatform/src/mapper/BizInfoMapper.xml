@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>   
+<!DOCTYPE mapper   
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"  
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd"> 
+
+<!-- mapper 为根元素节点， 一个namespace对应一个dao -->
+<mapper namespace="interf.mapper.BizInfoMapper">
+<!-- 	插入获取自增的id -->
+	<insert id="insert" parameterType="BizInfo" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO 
+	     bizInfo(
+	       bizId,
+	       picId,
+	       appId
+	     ) VALUES(
+	     	#{bizId,jdbcType=VARCHAR},
+	       #{picId,jdbcType=CHAR},
+	       #{appId,jdbcType=VARCHAR}
+	     ) 
+	</insert>
+<!-- 	<insert id="insert" parameterType="BizInfo"> -->
+<!-- 	<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="id"> -->
+<!-- 		SELECT LAST_INSERT_ID() AS id -->
+<!-- 	</selectKey> -->
+<!-- 		INSERT INTO  -->
+<!-- 	     bizInfo( -->
+<!-- 	     	id, -->
+<!-- 	       picId, -->
+<!-- 	       appId -->
+<!-- 	     ) VALUES( -->
+<!-- 	     	#{id,jdbcType=BIGINT}, -->
+<!-- 	       #{picId,jdbcType=CHAR}, -->
+<!-- 	       #{appId,jdbcType=VARCHAR} -->
+<!-- 	     )  -->
+<!-- 	</insert> -->
+
+<!--   批量插入picId信息 -->
+  <insert id="batchInsert" parameterType="java.util.List">
+  	insert into bizInfo(
+  		   bizId,
+	       picId,
+	       appId)
+  	values
+  	 <foreach collection="list" item="item" index="index" separator="," >  
+        (  
+           #{item.bizId,jdbcType=VARCHAR},
+	       #{item.picId,jdbcType=CHAR},
+	       #{item.appId,jdbcType=VARCHAR}
+  		)  
+    </foreach> 
+  </insert>
+</mapper>

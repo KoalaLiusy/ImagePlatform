@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ax25="http://pojo/xsd" xmlns:xsd="http://interf" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" targetNamespace="http://interf">
+    <wsdl:types>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://pojo/xsd">
+            <xs:complexType name="PicInfo">
+                <xs:sequence>
+                    <xs:element minOccurs="1" name="id" nillable="true" type="xs:long"/>
+                    <xs:element minOccurs="0" name="picFlag" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="1" name="picId" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="picName" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="picPath" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="picSeq" type="xs:int"/>
+                    <xs:element minOccurs="0" name="picType" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="status" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax26="http://pojo/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://interf">
+            <xs:import namespace="http://pojo/xsd"/>
+            <xs:element name="batchAddFiles">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="args0" nillable="true" type="ax25:PicInfo"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="addFile">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="args0" nillable="true" type="ax25:PicInfo"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="addFileRequest">
+        <wsdl:part name="parameters" element="xsd:addFile"/>
+    </wsdl:message>
+    <wsdl:message name="batchAddFilesRequest">
+        <wsdl:part name="parameters" element="xsd:batchAddFiles"/>
+    </wsdl:message>
+    <wsdl:portType name="PicInfoMapperPortType">
+        <wsdl:operation name="addFile">
+            <wsdl:input message="xsd:addFileRequest" wsaw:Action="urn:addFile"/>
+        </wsdl:operation>
+        <wsdl:operation name="batchAddFiles">
+            <wsdl:input message="xsd:batchAddFilesRequest" wsaw:Action="urn:batchAddFiles"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="PicInfoMapperSoap11Binding" type="xsd:PicInfoMapperPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="addFile">
+            <soap:operation soapAction="urn:addFile" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="batchAddFiles">
+            <soap:operation soapAction="urn:batchAddFiles" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="PicInfoMapperSoap12Binding" type="xsd:PicInfoMapperPortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="addFile">
+            <soap12:operation soapAction="urn:addFile" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="batchAddFiles">
+            <soap12:operation soapAction="urn:batchAddFiles" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="PicInfoMapperHttpBinding" type="xsd:PicInfoMapperPortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="addFile">
+            <http:operation location="addFile"/>
+            <wsdl:input>
+                <mime:content type="application/xml" part="parameters"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="batchAddFiles">
+            <http:operation location="batchAddFiles"/>
+            <wsdl:input>
+                <mime:content type="application/xml" part="parameters"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="PicInfoMapper">
+        <wsdl:port name="PicInfoMapperHttpSoap11Endpoint" binding="xsd:PicInfoMapperSoap11Binding">
+            <soap:address location="http://localhost:8080/axis2/services/PicInfoMapper"/>
+        </wsdl:port>
+        <wsdl:port name="PicInfoMapperHttpSoap12Endpoint" binding="xsd:PicInfoMapperSoap12Binding">
+            <soap12:address location="http://localhost:8080/axis2/services/PicInfoMapper"/>
+        </wsdl:port>
+        <wsdl:port name="PicInfoMapperHttpEndpoint" binding="xsd:PicInfoMapperHttpBinding">
+            <http:address location="http://localhost:8080/axis2/services/PicInfoMapper"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

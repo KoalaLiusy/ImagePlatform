@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Command transInstanceId="e756ff8d-c57c-4e5b-a371-5b53a556f053"
+	workFlowId="FES2013.12.11.13:30:23">
+	<Files>
+		<File businessCode="ImageNOC" fileOperation="AddFile" orgCode=""
+			operateStatus="" result="" fileDownLoadPosition="" fileDownLoadUrl="">
+			<TimeToLiveSeconds>3600</TimeToLiveSeconds>
+			<FileName>test2.19.0-016_010.tif</FileName>
+			<FileSize>25718</FileSize>
+			<FileTransPackageSize>102400</FileTransPackageSize>
+			<FileTotalPackage>1</FileTotalPackage>
+			<BusinessParameter>
+				<Parameter name="NOC_AD_BUSINESSID">test2.19.0-016</Parameter>
+				<Parameter name="NOC_AA_BRANCHID">95</Parameter>
+				<Parameter name="NOC_AB_ORGID">95</Parameter>
+				<Parameter name="RANGE">1-1</Parameter>
+				<Parameter name="NOC_AL_ISDELETE">-1</Parameter>
+				<Parameter name="NOC_AH_PAGECOUNT">1</Parameter>
+				<Parameter name="NOC_AE_BASEBUSINESSID">test2.19.0-016</Parameter>
+				<Parameter name="NOC_AG_FILENAME">test2.19.0-016_010.tif</Parameter>
+				<Parameter name="NOC_AC_ACCOUNTNO">test12345</Parameter>
+				<Parameter name="NOC_AF_FILENO">10</Parameter>
+				<Parameter name="NOC_AK_INSERTDATE">2014-06-30</Parameter>
+				<Parameter name="NOC_AI_DATATIME">2014-06-30 09:56:40</Parameter>
+			</BusinessParameter>
+			<SearchConfig>
+				<QueryCategory>ImageNOC</QueryCategory>
+				<QueryName>NOC_GetImageInfoByBusinessIdAndFileNo</QueryName>
+				<SearchCondition><![CDATA[NOC_AD_BUSINESSID = ? AND NOC_AF_FILENO = ?]]></SearchCondition>
+				<sqlParameters>
+					<Parameter>test2.19.0-016</Parameter>
+					<Parameter>10</Parameter>
+				</sqlParameters>
+			</SearchConfig>
+		</File>
+	</Files>
+	<ReturnResult>
+		<CallBackMethod value="HTTP">
+			<Http
+				url="http://10.112.17.124:8001/ImageAdminServer/control/ReturnMessageController.action" />
+			<Socket ip="" port="" />
+			<WebService url="" invokeMethod="" nameSpace="" />
+			<Jms factory="ConnectionFactory" url="t3://10.112.17.124:8001"
+				userName="d2VibG9naWM=" password="MTIzNDU2Nzg=" queueName="JMSQUEUE"
+				queueStartNo="0" queueEndNo="9" />
+		</CallBackMethod>
+		<ReturnMessageContent appAlias="ImageCA-NOC"
+			orgCode="95" TransInstanceId="e756ff8d-c57c-4e5b-a371-5b53a556f053"
+			WorkFlowId="FES2013.12.11.13:30:23" level="1">
+			<StateCode></StateCode>
+			<TransServerId></TransServerId>
+			<StoreId></StoreId>
+			<DocumentId></DocumentId>
+			<FileDownLoadUrl></FileDownLoadUrl>
+			<ImageAppMsg><![CDATA[ImageDomain_NOCBatchScan]]></ImageAppMsg>
+			<ImageAppRealAddress></ImageAppRealAddress>
+		</ReturnMessageContent>
+	</ReturnResult>
+</Command>

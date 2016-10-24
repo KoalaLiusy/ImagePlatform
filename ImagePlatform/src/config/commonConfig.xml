@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+<!-- 	线程池配置 -->
+	<bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="5"></property><!-- 维护最小线程数 -->
+		<property name="maxPoolSize" value="1000"></property><!--最大线程数  -->
+		<property name="keepAliveSeconds" value="30000"></property><!-- 线程池维护线程所允许的空闲时间 -->
+		<property name ="queueCapacity" value ="200"/><!-- 线程池所使用的缓冲队列 --> 
+	</bean>
+	
+	<bean id="applicationContext" class="org.apache.axis2.extensions.spring.receivers.ApplicationContextHolder"/>
+</beans>

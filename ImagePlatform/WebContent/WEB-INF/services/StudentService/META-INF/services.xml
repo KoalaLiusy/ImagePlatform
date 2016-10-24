@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- <service name="WeatherService" scope="application"> -->
+<!--     <description> -->
+<!--         Weather POJO Service -->
+<!--     </description> -->
+<!--     <messageReceivers> -->
+<!--         <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-only" -->
+<!--                          class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/> -->
+<!--         <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out" -->
+<!--                          class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/> -->
+<!--     </messageReceivers> -->
+    
+  
+<!-- </service> -->
+
+<!-- 访问地址中 的访问那个 webservice 的名字  不指定就是服务包文件名称  服务会话范围scope-->
+<!-- application : 应用级别。生命周期和Axis2引擎生命周期相同。 -->
+<!-- 2.soapsession : 使用addressing headers中的自定义引用属性来管理会话。 -->
+<!-- 3.transportsession : 使用transport cookies来管理会话，生命周期和底层的transport相同。 -->
+<!-- 4.request :生命周期很短，和请求处理周期相同(默认) -->
+<!-- 服务目标名字空间仅仅在WSDL生成过程中起作用。在运行时，如果有人试图使用?wsdl来查看WSDL，那么生成的WSDL文件中的目标名字空间就是services.xml -->
+<!-- 文件中指定的值。同时，我们为了使用自定义的WSDL文件，把WSDL文件放到META-INF目录中，这种情况下要覆盖原有的目标名字空间，也是通过往services.xml -->
+<!-- 文件中添加目标名字空间来实现的。目标名字空间的缺省值是http://ws.apache.org/axis2。 -->
+<service name="LessonAction" targetNamespace="http://testAxis2.org">
+	<description>测试spring整合aixs2的服务</description>
+<!-- 	通过ServiceObjectSupplier参数指定SpringServletContextObjectSupplier类来获得Spring的ApplicationContext对象 -->
+	<parameter name="ServiceObjectSupplier" locked="false">
+             org.apache.axis2.extensions.spring.receivers.SpringServletContextObjectSupplier
+         </parameter>
+<!-- 	参数供消息上下文访问，必选参数为name  可选参数locked指明是否允许参数被子节点覆盖,为true不能覆盖 -->
+<!-- 	Web服务并不强制要求指定服务实现类，若有用ServiceClass指定 -->
+<!--  	<parameter name="ServiceClass" locked="false">test.service.ServiceOne</parameter>  -->
+<!-- 	与spring整合 -->
+ 	<parameter name="SpringBeanName">fileOperatorService</parameter> 
+
+<!--operation 如果服务实现类是用Java编写的，那么服务类中的所有public方法，默认都是要暴露出去的。如果服务类使用其它语言编写的，那么我们必须指定要发布的操作， -->
+<!-- 否则默认是不暴露出去的 -->
+<!-- <operation name=doSmt> -->
+<!-- <parameter name=location locked=false>California ,USA</parameter> -->
+<!-- 操作级消息接收器 -->
+<!-- <messageReceiver class="org.apache.axis2.MyMessageReceiver"/> -->
+<!-- </operation> -->
+<!-- 服务级消息接收器 In路径（请求路径）中的最后一个处理器,每个操作都有，不同操作可以不同，依赖于消息交换模式，此处是服务级的 -->
+<messageReceivers>
+	<messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-only" class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
+	<messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out" class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+</messageReceivers>
+
+<!--   在部署的时候，如果不指定schema目标名字空间，则根据服务实现类的全路径名来生成目标名字空间。例如，如果服务类的全路径名是 -->
+<!--   org.apache.axis2.FooService，那生成的schema名字空间是http://FooService.axis2.apache.org/xsd -->
+<!-- 在使用Java类生成WSDL文件时，WSDL文件中schema定义中的elementFormDefault默认是设置为qualified。如果qualified为true，则响应消息中的所有元素都是受限的。但是有些时候我们并不需要这种行为， -->
+<!-- 我们希望把elementFormDefault设置为unqualified -->
+<schema schemaNamespace="http://testAxis2.org/xsd" elementFormDefaultQualified="false"/>
+
+<!-- Axis2可以在多种传输通道上暴露服务,我们可以在选定的传输通道上暴露服务。比如说系统管理服务，我们希望该服务只在支持SSL的通道上暴露， -->
+<!-- 这样才能保证系统管理的安全性 不指定则在所有通道上暴露 -->
+<!-- <transports> -->
+<!-- 	<transport>https</transport> -->
+<!-- </transports> -->
+
+<!-- 不希望发布的public操作 -->
+<excludeOperations>
+<!-- 	<operation>setMapper</operation> -->
+<!-- 	<operation>init</operation> -->
+</excludeOperations>
+ 
+</service>
+
+
