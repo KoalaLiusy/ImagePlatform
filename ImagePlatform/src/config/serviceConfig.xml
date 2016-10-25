@@ -21,7 +21,7 @@
 		<property name="pool" ref="taskExecutor"></property>
 	</bean>
 	
- 	<bean id="serviceOne" class="test.service.ServiceOne">
+ 	<bean id="serviceOne" class="service.ServiceOne">
  		<property name="mapper" ref="fileInfoMapper"></property>
  	</bean>
  	
