@@ -13,6 +13,9 @@ public enum ExceptionType {
 	STORE0007,
 	STORE0008,
 	STORE0009,
+	STORE0010,
+	STORE0011,
+	STORE0012,
 	
 	/**
 	 * 参数校验异常

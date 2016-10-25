@@ -3,7 +3,9 @@ package service;
 import interf.mapper.PicInfoMapper;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -31,8 +33,10 @@ import pojo.message.FileDeleteBody;
 import pojo.message.FileUploadAndUpdateBody;
 import pojo.message.RequestDataBase;
 
+import sun.misc.BASE64Decoder;
 import task.ZoomImageTask;
 import util.PropertUtil;
+import util.StringUtil;
 
 /**
  * 处理文件上传服务，文件流与业务报文结合上传,文件更新删除等
@@ -96,12 +100,64 @@ public class FileUploadService {
 					file.transferTo(localFile);
 					result.setPicPath(localFile.getPath());
 					result.setPicName(fileName);
-					result.setPicType(fileName.substring(fileName.lastIndexOf(".")).toUpperCase());
+					result.setPicType(fileName.substring(fileName.lastIndexOf(".")));
 					pool.execute(new ZoomImageTask(filePath));//生成缩略图
 				}
 			}
 		}
 		return result;
+	}
+	
+	/**
+	 * 传入的是base64转码后的图片信息
+	 */
+	public void uploadByBase64(RequestDataBase<FileUploadAndUpdateBody> jsonObj){
+		FileUploadAndUpdateBody body = jsonObj.getBody();
+		String base64Img = body.getBase64Img();//base64转码的字符串
+		String picType = body.getPicType();
+		String picId = jsonObj.getHeader().getPicId();
+		if(!StringUtil.isNotNull(base64Img)){
+			throw new PicBaseException(ExceptionType.STORE0009);
+		}
+		BASE64Decoder decoder  = new BASE64Decoder();
+		String filePath = null;
+		String imgName = null;
+		try {
+			// Base64解码
+			byte[] b = decoder.decodeBuffer(base64Img);
+			for (int i = 0; i < b.length; ++i) {
+				if (b[i] < 0) {// 调整异常数据
+				b[i] += 256;
+				}
+			}
+			// 生成jpeg图片
+			if(!StringUtil.isNotNull(picType) || !StringUtil.isNotNull(picId)){
+				throw new PicBaseException(ExceptionType.VALID0001);
+			}
+			imgName = picId + "." + picType;// 新生成的图片
+			filePath = mkPicDir() + sep + imgName;
+			OutputStream out = new FileOutputStream(filePath);
+			out.write(b);
+			out.flush();
+			out.close();
+		} catch (Exception e) {
+			throw new PicBaseException(ExceptionType.STORE0010,e);
+		}
+		pool.execute(new ZoomImageTask(filePath));//生成缩略图
+		PicInfo picInfo = new PicInfo();
+		picInfo.setPicPath(filePath);
+		picInfo.setPicType(picType);
+		picInfo.setPicName(imgName);
+		picInfo.setPicId(jsonObj.getHeader().getPicId());//单张取报文头里的picId
+		picInfo.setExpiryDate(body.getExpiryDate());
+		picInfo.setReservedValue1(body.getReservedValue1());
+		picInfo.setReservedValue2(body.getReservedValue2());
+		picInfo.setReservedValue3(body.getReservedValue3());
+		try {
+			mapper.addFile(picInfo);
+		} catch (Exception e) {
+			throw new PicBaseException(ExceptionType.STORE0005,e);
+		}
 	}
 
 	/**
@@ -181,19 +237,5 @@ public class FileUploadService {
 			zoomPicFile.mkdirs();
 		}
 		return file.getPath();
-	}
-	
-	public static void main(String[] args) {
-        Calendar now = Calendar.getInstance();  
-        System.out.println("年: " + now.get(Calendar.YEAR));  
-        System.out.println("月: " + (now.get(Calendar.MONTH) + 1) + "");  
-        System.out.println("日: " + now.get(Calendar.DAY_OF_MONTH));  
-        System.out.println("时: " + now.get(Calendar.HOUR_OF_DAY));  
-        System.out.println("分: " + now.get(Calendar.MINUTE));  
-        System.out.println("秒: " + now.get(Calendar.SECOND));  
-        System.out.println("当前时间毫秒数：" + now.getTimeInMillis());  
-        System.out.println(now.getTime()); 
-        //System.out.println(PropertUtil.getCommonMessage("mkDirMode"));
-        System.out.println(new FileUploadService().mkPicDir());
 	}
 }

@@ -2,6 +2,8 @@ package util;
 
 import java.nio.charset.Charset;
 
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 
 
 /**
@@ -38,13 +40,13 @@ public class SecretUtil {
      * @return
      * @throws Exception
      */
-//    public static byte[] decryptBASE(String key) throws Exception { 
-//    		return (new BASE64Decoder()).decodeBuffer(key); 
-//    }
-//    
-//    public static String encryptBASE(byte[] key) throws Exception { 
-//    	return (new BASE64Encoder()).encodeBuffer(key); 
-//    } 
+    public static byte[] decryptBASE(String key) throws Exception { 
+    		return (new BASE64Decoder()).decodeBuffer(key); 
+    }
+    
+    public static String encryptBASE(byte[] key) throws Exception { 
+    	return (new BASE64Encoder()).encodeBuffer(key); 
+    } 
     
     public static void main(String[] args) {
     	String in = "d:/2015/23/23/sdsad324234234.png";
