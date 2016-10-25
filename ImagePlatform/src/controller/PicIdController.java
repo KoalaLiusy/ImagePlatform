@@ -11,12 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import exception.PicBaseException;
+
 import pojo.message.AskPicIdBody;
 import pojo.message.RequestDataBase;
 import pojo.message.ResponseDataBase;
-import test.service.PicIdService;
+import service.PicIdService;
 import util.JsonUtil;
 import util.StringUtil;
 
@@ -27,15 +30,11 @@ public class PicIdController {
 	private Logger log = Logger.getLogger(PicIdController.class);
 	
 	@RequestMapping("getPicId")
-	public String getStartPicID(@RequestBody RequestDataBase<AskPicIdBody> jsonObj2,HttpServletRequest request){
+	public @ResponseBody ResponseDataBase<AskPicIdBody> getStartPicID(@RequestBody RequestDataBase<AskPicIdBody> jsonObj,HttpServletRequest request){
 		boolean success = false;
-		String requestMessage="";
 		StringBuilder failInfo = new StringBuilder("");
-		RequestDataBase<AskPicIdBody> jsonObj = null;
 		String startPicId = "";
 		try {
-			jsonObj = JsonUtil.jsonToReferenceObject(requestMessage, 
-							new TypeReference<RequestDataBase<AskPicIdBody>>(){});
 			startPicId = service.getNewPicId(jsonObj);
 			success = true;
 		} catch (PicBaseException e) {
@@ -52,9 +51,7 @@ public class PicIdController {
 		ResponseDataBase<AskPicIdBody> response = new ResponseDataBase<AskPicIdBody>();
 		response.setBody(body);
 		
-		String str = JsonUtil.transportMessage(jsonObj,response,success,failInfo.toString());
-		Map resultMap = new HashMap();
-		resultMap.put("responseMessage", str);
-		return str;
+		response = JsonUtil.transportMessage(jsonObj,response,success,failInfo.toString());
+		return response;
 	}
 }

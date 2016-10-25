@@ -100,7 +100,7 @@ public final class JsonUtil {
 	 * @param <A>
 	 * @return
 	 */
-	public static <T, A> String transportMessage(RequestDataBase<T> request,ResponseDataBase<A> response,
+	public static <T, A> ResponseDataBase<A> transportMessage(RequestDataBase<T> request,ResponseDataBase<A> response,
 			boolean success,String failInfo){
 		if(request != null){
 			response.setVersion(request.getVersion());
@@ -108,6 +108,6 @@ public final class JsonUtil {
 		}
 		response.setSuccess(success);
 		response.setFailInfo(failInfo);
-		return objectToJson(response);
+		return response;
 	}
 }

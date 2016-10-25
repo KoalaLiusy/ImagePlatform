@@ -12,7 +12,7 @@
 
 
 	<tx:annotation-driven transaction-manager="transactionManager"/><!--  启用事物注解 -->
-	 <context:component-scan base-package="test.service.*">
+	 <context:component-scan base-package="service.*">
     </context:component-scan>
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="${driverClassName}" />      

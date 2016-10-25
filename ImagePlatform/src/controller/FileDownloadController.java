@@ -20,8 +20,7 @@ import pojo.PicInfo;
 import pojo.message.FileViewBody;
 import pojo.message.RequestDataBase;
 import pojo.message.ResponseDataBase;
-
-import test.service.ViewAndDownloadService;
+import service.ViewAndDownloadService;
 import util.FileUtil;
 import util.JsonUtil;
 import util.PropertUtil;

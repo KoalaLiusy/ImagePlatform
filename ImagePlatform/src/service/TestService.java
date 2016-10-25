@@ -1,4 +1,4 @@
-package test.service;
+package service;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;

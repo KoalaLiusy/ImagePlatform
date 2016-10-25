@@ -1,4 +1,4 @@
-package test.service;
+package service;
 
 import interf.mapper.BizInfoMapper;
 import interf.mapper.PicIdMapper;

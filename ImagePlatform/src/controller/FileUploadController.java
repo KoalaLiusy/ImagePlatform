@@ -8,12 +8,14 @@ import org.apache.log4j.Logger;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import pojo.message.FileUploadAndUpdateBody;
 import pojo.message.RequestDataBase;
 import pojo.message.ResponseDataBase;
-import test.service.FileUploadService;
+import service.FileUploadService;
 import util.JsonUtil;
 import exception.PicBaseException;
 
@@ -32,15 +34,12 @@ public class FileUploadController {
 	 * @throws IllegalStateException 
 	 */
 	@RequestMapping("upload")
-	public String uploadFile(String requestMessage,HttpServletRequest request){
+	public @ResponseBody ResponseDataBase<FileUploadAndUpdateBody> uploadFile(
+			@RequestBody RequestDataBase<FileUploadAndUpdateBody> jsonObj,HttpServletRequest request){
 		StringBuilder failInfo = new StringBuilder("");
 		ResponseDataBase<FileUploadAndUpdateBody> response = new ResponseDataBase<FileUploadAndUpdateBody>();
-		RequestDataBase<FileUploadAndUpdateBody> jsonObj = null;
 		boolean success = false;
 		try {
-			jsonObj = 
-					JsonUtil.jsonToReferenceObject(requestMessage, 
-							new TypeReference<RequestDataBase<FileUploadAndUpdateBody>>(){});//映射请求报文到对象
 			fileUploadService.uploadSinglePicWithJson(jsonObj,request);
 			success = true;
 		} catch (IllegalStateException e) {

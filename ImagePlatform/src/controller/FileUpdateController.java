@@ -8,15 +8,18 @@ import org.apache.log4j.Logger;
 import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
 import exception.PicBaseException;
 
 import pojo.message.FileDeleteBody;
 import pojo.message.FileUploadAndUpdateBody;
 import pojo.message.RequestDataBase;
 import pojo.message.ResponseDataBase;
-
-import test.service.FileUploadService;
+import service.FileUploadService;
 import util.JsonUtil;
 
 @Controller
@@ -27,14 +30,12 @@ public class FileUpdateController {
 	private Logger log =Logger.getLogger(FileUpdateController.class);
 	
 	@RequestMapping("delete")
-	public String delete(String requestMessage){
-		RequestDataBase<FileDeleteBody> jsonObj = null;
+	public @ResponseBody ResponseDataBase<FileDeleteBody> 
+		delete(@RequestBody RequestDataBase<FileDeleteBody> jsonObj){
 		ResponseDataBase<FileDeleteBody> response = new ResponseDataBase<FileDeleteBody>();
 		boolean success = false;
 		StringBuilder failInfo = new StringBuilder("");
 		try {
-			jsonObj = JsonUtil.jsonToReferenceObject(requestMessage, 
-							new TypeReference<RequestDataBase<FileDeleteBody>>(){});//映射请求报文到对象
 			success = service.deletePic(jsonObj);
 		} catch (PicBaseException e){
 			failInfo.append(e.getBizMessage());
@@ -46,14 +47,12 @@ public class FileUpdateController {
 	}
 	
 	@RequestMapping("update")
-	public String update(String requestMessage,HttpServletRequest request){
-		RequestDataBase<FileUploadAndUpdateBody> jsonObj = null;
+	public @ResponseBody ResponseDataBase<FileUploadAndUpdateBody> 
+			update(@RequestBody RequestDataBase<FileUploadAndUpdateBody> jsonObj,HttpServletRequest request){
 		boolean success = false;
 		StringBuilder failInfo = new StringBuilder("");
 		ResponseDataBase<FileUploadAndUpdateBody> response = new ResponseDataBase<FileUploadAndUpdateBody>();
 		try {
-			jsonObj = JsonUtil.jsonToReferenceObject(requestMessage, 
-					new TypeReference<RequestDataBase<FileUploadAndUpdateBody>>(){});
 			service.updatePic(jsonObj, request);
 			success = true;
 		} catch (IllegalStateException e) {
